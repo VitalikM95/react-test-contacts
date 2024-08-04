@@ -1,5 +1,5 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { ICreateForm } from "../models";
+import { ICreateForm } from "../types";
 import { emailValidation } from "../utils/validation";
 
 const CreateInput = () => {

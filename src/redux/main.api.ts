@@ -1,138 +1,35 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IActionLog, IBoard, ICreateTask, IList, ITask } from '../models'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IContact, IContactsApi } from "../types";
 
-type BoardData = {
-  id: number
-  name: string
-}
-type ListData = {
-  id?: number
-  boardId: number
-  name: string
-}
-type TaskData = {
-  id: number
-  name?: string
-  description?: string
-  dueDate?: string
-  priority?: string
-  status?: string
-}
+type ContactType = {
+  resources: IContact[];
+};
 
 export const mainApi = createApi({
-  reducerPath: 'main/api',
+  reducerPath: "main/api",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:4444/api',
+    baseUrl: "/api",
+    prepareHeaders: (headers) => {
+      headers.set("Authorization", "Bearer VlP9cwH6cc7Kg2LsNPXpAvF6QNmgZn");
+      headers.set("Key", "Bearer MY_API_KEY");
+      headers.set("Origin", "http://localhost:5173");
+      headers.set("x-requested-with", "XMLHttpRequest");
+      return headers;
+    },
   }),
-  tagTypes: ['List', 'Task', 'History', 'Board'],
-  endpoints: build => ({
-    getAllBoards: build.query<IBoard[], void>({
+  tagTypes: ["Contacts", "Tags"],
+  endpoints: (build) => ({
+    getAllContacts: build.query<IContactsApi, void>({
       query: () => ({
-        url: '/boards',
+        url: "/contacts",
       }),
-      providesTags: () => ['Board'],
+      providesTags: () => ["Contacts"],
     }),
-    getBoard: build.query<IBoard, number>({
-      query: boardId => ({
-        url: `/boards/${boardId}`,
+    getContact: build.query<ContactType, string>({
+      query: (contactId) => ({
+        url: `/contact/${contactId}`,
       }),
-      providesTags: () => ['Board'],
-    }),
-    createBoard: build.mutation<IBoard, string>({
-      query: name => ({
-        url: '/boards',
-        method: 'POST',
-        body: { name },
-      }),
-      invalidatesTags: ['Board'],
-    }),
-    updateBoard: build.mutation<IBoard, BoardData>({
-      query: boardData => ({
-        url: `/boards/${boardData.id}`,
-        method: 'PATCH',
-        body: { name: boardData.name },
-      }),
-      invalidatesTags: ['Board'],
-    }),
-    deleteBoard: build.mutation<IBoard, number>({
-      query: boardId => ({
-        url: `/boards/${boardId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['Board'],
-    }),
-
-    // LISTS
-
-    getListsByBoard: build.query<IList[], number>({
-      query: boardId => ({
-        url: `/lists/${boardId}`,
-      }),
-      providesTags: () => ['List'],
-    }),
-    createList: build.mutation<IList, ListData>({
-      query: ({ name, boardId }) => ({
-        url: '/lists',
-        method: 'POST',
-        body: { name, boardId },
-      }),
-      invalidatesTags: ['List', 'Board', 'History'],
-    }),
-    updateList: build.mutation<IList, ListData>({
-      query: listData => ({
-        url: `/lists/${listData.id}`,
-        method: 'PATCH',
-        body: { name: listData.name, boardId: listData.boardId },
-      }),
-      invalidatesTags: ['List', 'Board', 'Task', 'History'],
-    }),
-    deleteList: build.mutation<IList, number>({
-      query: listId => ({
-        url: `/lists/${listId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['List', 'Board', 'History'],
-    }),
-
-    // TASKS
-
-    getTask: build.query<ITask, number>({
-      query: taskId => ({
-        url: `/tasks/${taskId}`,
-      }),
-      providesTags: () => ['Task'],
-    }),
-    createTask: build.mutation<ITask, ICreateTask>({
-      query: (taskData: ICreateTask) => ({
-        url: '/tasks',
-        method: 'POST',
-        body: taskData,
-      }),
-      invalidatesTags: ['Board', 'History'],
-    }),
-    updateTask: build.mutation<ITask, TaskData>({
-      query: taskData => ({
-        url: `/tasks/${taskData.id}`,
-        method: 'PATCH',
-        body: taskData,
-      }),
-      invalidatesTags: ['Board', 'Task', 'History'],
-    }),
-    deleteTask: build.mutation<ITask, number>({
-      query: taskId => ({
-        url: `/tasks/${taskId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: ['Board', 'History'],
-    }),
-
-    // HISTORY
-
-    getHistory: build.query<IActionLog[], void>({
-      query: () => ({
-        url: '/action-log',
-      }),
-      providesTags: () => ['History'],
+      providesTags: () => ["Contacts"],
     }),
   }),
-})
+});

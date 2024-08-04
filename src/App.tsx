@@ -7,7 +7,7 @@ function App() {
     <div className="mx-auto min-w-[400px] max-w-[1312px] px-4 py-12">
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/:contactId" element={<ContactPage />} />
+        <Route path="/contact/:contactId" element={<ContactPage />} />
       </Routes>
     </div>
   );

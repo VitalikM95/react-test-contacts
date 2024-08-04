@@ -1,22 +1,53 @@
+import { FC } from "react";
 import { CloseSvg, UserSvg } from "../assets/svg-data";
-const ContactCard = () => {
+import { IContact } from "../types";
+import { Link } from "react-router-dom";
+
+type ContactCardProps = {
+  contact: IContact;
+};
+
+const ContactCard: FC<ContactCardProps> = ({ contact }) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
-    <div className="my-4 flex w-full rounded-sm bg-gray-200 p-4 text-lg font-semibold">
-      <UserSvg size="74px" />
+    <Link
+      to={`/contact/${contact.id}`}
+      className="my-4 flex w-full rounded-sm bg-gray-200 p-4 text-lg font-semibold"
+    >
+      {(
+        <img
+          width="125px"
+          height="75px"
+          src={`${contact.avatar_url}`}
+          alt="avatar"
+        />
+      ) || <UserSvg size="75px" />}
       <div className="flex flex-grow flex-col px-4">
         <div className="my-1 flex flex-wrap gap-3">
-          <span>First Name</span>
-          <span>Last Name</span>
+          <span>{contact?.fields["first name"]?.[0].value || "Unknown"}</span>
+          <span>{contact?.fields["last name"]?.[0].value || "Unknown"}</span>
         </div>
-        <div>email@email.com</div>
+        <div>{contact?.fields.email[0].value || "Unknown"}</div>
         <div className="my-4 flex flex-wrap gap-2">
-          <span className="text-md rounded-md bg-slate-400 px-3">Tag1</span>
+          {contact?.tags2.length ? (
+            contact?.tags2.map((tag) => (
+              <span key={tag} className="text-md rounded-md bg-slate-400 px-3">
+                {tag}
+              </span>
+            ))
+          ) : (
+            <span className="font-light">no tags</span>
+          )}
         </div>
       </div>
-      <button className="h-fit">
+      <button onClick={handleButtonClick} className="h-fit">
         <CloseSvg />
       </button>
-    </div>
+    </Link>
   );
 };
 
