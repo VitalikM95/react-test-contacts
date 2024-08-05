@@ -22,7 +22,6 @@ const ContactPage = () => {
       .filter((tag: string) => tag.trim() !== "");
 
     contactId && addTags({ id: contactId, tags: tagsArray });
-    console.log({ id: contactId, tags: tagsArray });
   };
 
   return (

@@ -16,21 +16,27 @@ const ContactCard: FC<ContactCardProps> = ({ contact }) => {
     e.stopPropagation();
     deleteContact(contact.id);
   };
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isLoading) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <Link
       to={`/contact/${contact.id}`}
+      onClick={handleClick}
       className="my-4 flex w-full rounded-sm bg-gray-200 p-4 text-lg font-semibold"
     >
       {(
         <img
+          className="h-fit"
           width="125px"
-          height="75px"
           src={`${contact.avatar_url}`}
           alt="avatar"
         />
       ) || <UserSvg size="75px" />}
-      <div className="flex flex-grow flex-col px-4">
+      <div className="flex flex-grow flex-col overflow-hidden px-4">
         <div className="my-1 flex flex-wrap gap-3">
           <span>{contact?.fields["first name"]?.[0].value || "Unknown"}</span>
           <span>{contact?.fields["last name"]?.[0].value || "Unknown"}</span>

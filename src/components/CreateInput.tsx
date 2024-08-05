@@ -47,11 +47,10 @@ const CreateInput = () => {
       },
       owner_id: null,
     });
-    console.log(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className="sticky top-0" onSubmit={handleSubmit(onSubmit)}>
       <div className="p-2">First Name *</div>
       <Controller
         name="first name"
