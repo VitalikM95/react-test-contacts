@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://live.devnimble.com/api/v1",
+        target:
+          "https://cors-anywhere.herokuapp.com/https://live.devnimble.com/api/v1",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
         secure: false,
