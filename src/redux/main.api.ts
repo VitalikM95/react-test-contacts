@@ -17,7 +17,6 @@ export const mainApi = createApi({
     prepareHeaders: (headers) => {
       headers.set("Authorization", "Bearer VlP9cwH6cc7Kg2LsNPXpAvF6QNmgZn");
       headers.set("Key", "Bearer MY_API_KEY");
-      headers.set("Origin", "https://vitalikm95.github.io/react-test-contacts");
       headers.set("x-requested-with", "XMLHttpRequest");
       return headers;
     },
