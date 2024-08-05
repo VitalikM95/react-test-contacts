@@ -1,16 +1,20 @@
 import { FC } from "react";
 import { CloseSvg, UserSvg } from "../assets/svg-data";
-import { IContact } from "../types";
+import { IContact } from "../utils/ContactApi.types";
 import { Link } from "react-router-dom";
+import { mainApi } from "../redux/main.api";
 
 type ContactCardProps = {
   contact: IContact;
 };
 
 const ContactCard: FC<ContactCardProps> = ({ contact }) => {
+  const [deleteContact, { isLoading }] = mainApi.useDeleteContactMutation();
+
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    deleteContact(contact.id);
   };
 
   return (
@@ -31,7 +35,7 @@ const ContactCard: FC<ContactCardProps> = ({ contact }) => {
           <span>{contact?.fields["first name"]?.[0].value || "Unknown"}</span>
           <span>{contact?.fields["last name"]?.[0].value || "Unknown"}</span>
         </div>
-        <div>{contact?.fields.email[0].value || "Unknown"}</div>
+        <div>{contact?.fields.email?.[0].value || "Unknown"}</div>
         <div className="my-4 flex flex-wrap gap-2">
           {contact?.tags2.length ? (
             contact?.tags2.map((tag) => (
@@ -44,9 +48,13 @@ const ContactCard: FC<ContactCardProps> = ({ contact }) => {
           )}
         </div>
       </div>
-      <button onClick={handleButtonClick} className="h-fit">
-        <CloseSvg />
-      </button>
+      {isLoading ? (
+        <>loading...</>
+      ) : (
+        <button onClick={handleButtonClick} className="h-fit">
+          <CloseSvg />
+        </button>
+      )}
     </Link>
   );
 };

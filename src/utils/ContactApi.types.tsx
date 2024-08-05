@@ -1,9 +1,3 @@
-export interface ICreateForm {
-  first_name: string;
-  last_name?: string;
-  email: string;
-}
-
 export interface IContactsApi {
   resources: IContact[];
   meta: Meta;
@@ -31,7 +25,7 @@ export interface IContact {
   reminders: any;
   reminder: any;
   creator_id: string;
-  privacy: Privacy;
+  privacy: IPrivacy;
   is_editable: boolean;
   stages_info: StagesInfo;
   files: any;
@@ -133,7 +127,7 @@ export interface CompanyLastContacted {
   out: any;
 }
 
-export interface Privacy {
+export interface IPrivacy {
   read: any;
   edit: any;
 }

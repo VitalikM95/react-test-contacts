@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IAppState } from "../types";
+import { IAppState } from "../utils/ContactApi.types";
 
 type ModalAction = {
   taskId?: number;

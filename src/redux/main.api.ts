@@ -1,8 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IContact, IContactsApi } from "../types";
+import { IContact, IContactsApi } from "../utils/ContactApi.types";
 
-type ContactType = {
+type ContactData = {
   resources: IContact[];
+};
+
+type TagsData = {
+  id: string;
+  tags: string[];
 };
 
 export const mainApi = createApi({
@@ -22,14 +27,40 @@ export const mainApi = createApi({
     getAllContacts: build.query<IContactsApi, void>({
       query: () => ({
         url: "/contacts",
+        params: {
+          sort: "created:desc",
+        },
       }),
       providesTags: () => ["Contacts"],
     }),
-    getContact: build.query<ContactType, string>({
+    getContact: build.query<ContactData, string>({
       query: (contactId) => ({
         url: `/contact/${contactId}`,
       }),
       providesTags: () => ["Contacts"],
+    }),
+    createContact: build.mutation<any, any>({
+      query: (createContactData) => ({
+        url: "/contact",
+        method: "POST",
+        body: createContactData,
+      }),
+      invalidatesTags: ["Contacts"],
+    }),
+    addTags: build.mutation<any, TagsData>({
+      query: (tagsData) => ({
+        url: `contacts/${tagsData.id}/tags`,
+        method: "PUT",
+        body: { tags: tagsData.tags },
+      }),
+      invalidatesTags: ["Contacts"],
+    }),
+    deleteContact: build.mutation<string, string>({
+      query: (contactId) => ({
+        url: `/contact/${contactId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Contacts"],
     }),
   }),
 });

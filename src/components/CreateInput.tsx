@@ -1,21 +1,60 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { ICreateForm } from "../types";
+import { ICreateForm } from "../utils/types";
 import { emailValidation } from "../utils/validation";
+import { mainApi } from "../redux/main.api";
 
 const CreateInput = () => {
+  const [createContact, { isLoading }] = mainApi.useCreateContactMutation();
+
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<ICreateForm>();
 
-  const onSubmit: SubmitHandler<ICreateForm> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<ICreateForm> = (data) => {
+    createContact({
+      record_type: "person",
+      fields: {
+        email: [
+          {
+            label: "email",
+            modifier: "other",
+            value: data.email,
+            is_primary: true,
+          },
+        ],
+        "first name": [
+          {
+            label: "first name",
+            modifier: "",
+            value: data["first name"],
+            is_primary: true,
+          },
+        ],
+        "last name": [
+          {
+            label: "last name",
+            modifier: "",
+            value: data["last name"] || null,
+            is_primary: true,
+          },
+        ],
+      },
+      privacy: {
+        read: null,
+        edit: null,
+      },
+      owner_id: null,
+    });
+    console.log(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="p-2">First Name *</div>
       <Controller
-        name="first_name"
+        name="first name"
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
@@ -26,13 +65,13 @@ const CreateInput = () => {
           />
         )}
       />
-      {errors.first_name && errors.first_name.type === "required" && (
+      {errors["first name"] && errors["first name"].type === "required" && (
         <span className="text-red-500">Field is required</span>
       )}
 
       <div className="p-2">Last Name</div>
       <Controller
-        name="last_name"
+        name="last name"
         control={control}
         render={({ field }) => (
           <input
@@ -62,10 +101,12 @@ const CreateInput = () => {
       {errors.email && errors.email.type === "pattern" && (
         <span className="text-red-500">{errors.email.message}</span>
       )}
-
       <button
+        disabled={isLoading}
         type="submit"
-        className="mt-5 h-12 w-full rounded-md border-2 border-gray-400 font-semibold transition-all duration-100 ease-in-out hover:bg-slate-100"
+        className={`mt-5 h-12 w-full rounded-md border-2 border-gray-400 font-semibold transition-all duration-100 ease-in-out ${
+          isLoading ? "cursor-not-allowed bg-gray-300" : "hover:bg-slate-100"
+        }`}
       >
         Add Contact
       </button>
