@@ -22,7 +22,7 @@ export const mainApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Contacts", "Tags"],
+  tagTypes: ["Contacts"],
   endpoints: (build) => ({
     getAllContacts: build.query<IContactsApi, void>({
       query: () => ({
