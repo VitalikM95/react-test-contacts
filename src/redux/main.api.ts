@@ -13,7 +13,8 @@ type TagsData = {
 export const mainApi = createApi({
   reducerPath: "main/api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api",
+    baseUrl:
+      "https://cors-anywhere.herokuapp.com/corsdemo/https://live.devnimble.com/api/v1",
     prepareHeaders: (headers) => {
       headers.set("Authorization", "Bearer VlP9cwH6cc7Kg2LsNPXpAvF6QNmgZn");
       headers.set("Key", "Bearer MY_API_KEY");
